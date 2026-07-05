@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCZ电子竞技俱乐部 · 官方总站</title>
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --gold: #c9a96e;
+            --cyan: #0ea5a0;
+            --text: #c0c0c0;
+            --card-bg: #18181f;
+            --card-border: #252530;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: rgba(10,10,14,0.92); backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(201,169,110,0.2); padding: 0 1rem;
+        }
+        .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+        .nav-logo { font-family: 'Cinzel',serif; font-size: 1.5rem; letter-spacing: 2px; color: var(--gold); text-decoration: none; }
+        .nav-logo span { color: var(--cyan); }
+        .nav-links { display: flex; list-style: none; gap: 0.2rem; }
+        .nav-links a { color: var(--text); text-decoration: none; padding: 0.4rem 0.9rem; border-radius: 4px; font-size: 0.85rem; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--gold); }
+        .section { padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .section-title { font-family: 'Cinzel',serif; font-size: 2rem; letter-spacing: 4px; color: var(--gold); text-align: center; margin-bottom: 0.5rem; }
+        .section-subtitle { text-align: center; color: #8a8a8a; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 2rem; }
+        .section-line { width: 60px; height: 2px; background: linear-gradient(90deg,transparent,var(--cyan),transparent); margin: 0 auto 2rem; }
+        .hero { position: relative; min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(180deg,#08080c 0%,#0d0d16 100%); padding-top: 80px; }
+        .hero-logo-main { font-family: 'Cinzel',serif; font-size: clamp(2.5rem,6vw,5rem); font-weight: 900; letter-spacing: 6px; color: var(--gold); text-shadow: 0 0 80px rgba(201,169,110,0.5); }
+        .hero-slogan { font-size: 1.2rem; color: #e8d5a3; letter-spacing: 3px; margin-top: 1rem; }
+        .division-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+        .division-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 2rem; text-align: center; cursor: pointer; text-decoration: none; color: inherit; transition: 0.3s; }
+        .division-card:hover { transform: translateY(-8px); border-color: var(--gold); box-shadow: 0 20px 50px rgba(201,169,110,0.25); }
+        .division-card .div-icon { font-size: 3rem; color: var(--gold); }
+        .division-card h3 { font-size: 1.4rem; letter-spacing: 2px; margin: 1rem 0 0.3rem; }
+        .division-card p { font-size: 0.85rem; color: #8a8a8a; }
+        .division-card .div-badge { display: inline-block; background: rgba(14,165,160,0.2); color: #14c4bf; padding: 3px 12px; border-radius: 3px; font-size: 0.7rem; margin-top: 0.8rem; }
+        table.players-table { width: 100%; max-width: 900px; margin: 0 auto; border-collapse: collapse; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; overflow: hidden; }
+        .players-table th { background: rgba(201,169,110,0.08); color: var(--gold); padding: 0.8rem; font-size: 0.8rem; letter-spacing: 2px; }
+        .players-table td { padding: 0.7rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.9rem; }
+        .player-id { color: var(--gold); font-weight: 600; }
+        .player-role { color: #14c4bf; font-size: 0.8rem; }
+        .sponsor-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.8rem; max-width: 1000px; margin: 0 auto; }
+        .sponsor-item { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; color: #8a8a8a; font-size: 0.8rem; }
+        .sponsor-icon { width: 55px; height: 55px; border-radius: 8px; background: #1a1a24; border: 1px solid #2a2a35; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        footer { background: #060608; text-align: center; padding: 2rem; color: #8a8a8a; font-size: 0.8rem; margin-top: 3rem; }
+        @media (max-width: 768px) { .nav-links a { padding: 0.3rem 0.6rem; font-size: 0.75rem; } .division-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="#home" class="nav-logo">MC<span>Z</span></a>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#divisions">分部</a></li>
+                <li><a href="#players">选手</a></li>
+                <li><a href="#sponsors">赞助商</a></li>
+                <li><a href="#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+    <section class="hero" id="home">
+        <div class="hero-logo-main">MCZGAME</div>
+        <div class="hero-slogan">国家富强 · 民族振兴 · 我尽己任</div>
+    </section>
+    <section class="section" id="divisions">
+        <h2 class="section-title">旗下分部</h2>
+        <p class="section-subtitle">Our Divisions</p>
+        <div class="section-line"></div>
+        <div class="division-grid">
+            <a href="./lol/" class="division-card">
+                <div class="div-icon">⚔️</div>
+                <h3>英雄联盟</h3>
+                <p>League of Legends</p>
+                <span class="div-badge">LOL 分部 · 点击进入</span>
+            </a>
+            <a href="./cs/" class="division-card">
+                <div class="div-icon">🔫</div>
+                <h3>反恐精英</h3>
+                <p>Counter-Strike</p>
+                <span class="div-badge">CS 分部 · 点击进入</span>
+            </a>
+            <a href="./pubg/" class="division-card">
+                <div class="div-icon">🎯</div>
+                <h3>绝地求生</h3>
+                <p>PUBG: BATTLEGROUNDS</p>
+                <span class="div-badge">PUBG 分部 · 点击进入</span>
+            </a>
+        </div>
+    </section>
+    <section class="section" id="players">
+        <h2 class="section-title">全队选手</h2>
+        <p class="section-subtitle">All Players · MCZ Roster</p>
+        <div class="section-line"></div>
+        <table class="players-table">
+            <thead><tr><th>ID</th><th>姓名</th><th>分部</th><th>位置</th><th>简介</th></tr></thead>
+            <tbody>
+                <tr><td class="player-id">MCZb1ack</td><td>曹睿轩</td><td>CS</td><td class="player-role">突破手</td><td>完美RATING 2.89，最强突破利刃</td></tr>
+                <tr><td class="player-id">MCZlele</td><td>薛琪乐</td><td>CS</td><td class="player-role">主狙击手/副指挥</td><td>狙神榜900天榜首，反应0.072秒</td></tr>
+                <tr><td class="player-id">MCZbaik</td><td>詹百宽</td><td>CS</td><td class="player-role">自由人/副指挥</td><td>残局胜率79.3%，暗影战术核心</td></tr>
+                <tr><td class="player-id">MCZmaoc</td><td>金勇汉</td><td>CS</td><td class="player-role">副狙击手/补枪手</td><td>补枪成功率98%，浩方活化石</td></tr>
+                <tr><td class="player-id">MCZ Sheng</td><td>孟学生</td><td>CS</td><td class="player-role">突击手/补枪手</td><td>RATING 1.43，第六人晋升首发</td></tr>
+                <tr><td class="player-id">MCZxiaoyu</td><td>于连峰</td><td>CS</td><td class="player-role">补枪手/自由人（次发）</td><td>手枪局胜率91%，近战专家</td></tr>
+                <tr><td class="player-id">MCZdsxr</td><td>董思贤</td><td>CS</td><td class="player-role">青训/次发</td><td>青训营第一名，未来核心</td></tr>
+                <tr><td class="player-id">MCZtutu</td><td>张展图</td><td>CS</td><td class="player-role">替补</td><td>全武器大师</td></tr>
+                <tr><td class="player-id">MCZ LiuBing</td><td>江新宇</td><td>CS</td><td class="player-role">主教练</td><td>战术评分体系创始人</td></tr>
+                <tr><td class="player-id">MCZ TopKing</td><td>李振宇</td><td>LOL</td><td class="player-role">上单</td><td>韩服王者800点</td></tr>
+                <tr><td class="player-id">MCZ JungleGod</td><td>王浩然</td><td>LOL</td><td class="player-role">打野</td><td>LPL青训营MVP</td></tr>
+                <tr><td class="player-id">MCZ MidLaner</td><td>陈思远</td><td>LOL</td><td class="player-role">中单</td><td>峡谷之巅第一</td></tr>
+                <tr><td class="player-id">MCZ SnipeX</td><td>赵一鸣</td><td>PUBG</td><td class="player-role">狙击手</td><td>场均击倒1.8</td></tr>
+                <tr><td class="player-id">MCZ RushB</td><td>孙浩然</td><td>PUBG</td><td class="player-role">突击手</td><td>近战胜率82%</td></tr>
+            </tbody>
+        </table>
+    </section>
+    <section class="section" id="sponsors">
+        <h2 class="section-title">官方赞助商</h2>
+        <p class="section-subtitle">Official Partners</p>
+        <div class="section-line"></div>
+        <div class="sponsor-grid">
+            <div class="sponsor-item"><div class="sponsor-icon">🚗</div>Mercedes-Benz</div>
+            <div class="sponsor-item"><div class="sponsor-icon">VW</div>Volkswagen</div>
+            <div class="sponsor-item"><div class="sponsor-icon">🥤</div>Red Bull</div>
+            <div class="sponsor-item"><div class="sponsor-icon">🖱️</div>ZOWIE</div>
+            <div class="sponsor-item"><div class="sponsor-icon">💻</div>ROG</div>
+            <div class="sponsor-item"><div class="sponsor-icon">NV</div>NVIDIA</div>
+            <div class="sponsor-item"><div class="sponsor-icon">MT</div>Monster</div>
+            <div class="sponsor-item"><div class="sponsor-icon">AMD</div>AMD</div>
+            <div class="sponsor-item"><div class="sponsor-icon">IN</div>Intel</div>
+            <div class="sponsor-item"><div class="sponsor-icon">G</div>Logitech</div>
+            <div class="sponsor-item"><div class="sponsor-icon">🥤</div>Coca-Cola</div>
+        </div>
+    </section>
+    <footer id="contact">
+        <p>© 2021-2026 MCZ电子竞技俱乐部 · Mudanjiang Creation Zenith Esports Club</p>
+        <p>总部：中国黑龙江省牡丹江市 | 商务邮箱：mczesports@111631.xyz</p>
+        <p style="font-size:0.7rem;opacity:0.5;">MCZ · 国家富强 · 民族振兴 · 我尽己任</p>
+    </footer>
+</body>
+</html>
