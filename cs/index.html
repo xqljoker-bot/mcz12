@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCZ电子竞技俱乐部 | Mudanjiang Creation Zenith Esports</title>
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --bg2: #111116;
+            --bg3: #1a1a22;
+            --gold: #c9a96e;
+            --gold2: #d4b87a;
+            --gold-light: #e8d5a3;
+            --cyan: #0ea5a0;
+            --cyan2: #0d8f8b;
+            --cyan-light: #14c4bf;
+            --text: #c0c0c0;
+            --text2: #8a8a8a;
+            --text-light: #e0e0e0;
+            --red: #b33a3a;
+            --red-bright: #e04848;
+            --card-bg: #18181f;
+            --card-border: #252530;
+            --overlay: rgba(0, 0, 0, 0.75);
+            --font-cn: 'Noto Serif SC', 'STSong', 'Songti SC', 'SimSun', 'KaiTi', serif;
+            --font-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+            --font-display: 'Cinzel', 'Noto Serif SC', 'Georgia', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 10, 14, 0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+            transition: all 0.35s ease;
+            padding: 0 1rem;
+        }
+        .navbar.scrolled {
+            background: rgba(10, 10, 14, 0.97);
+            border-bottom-color: rgba(201, 169, 110, 0.45);
+            box-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
+        }
+        .nav-inner {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+        .nav-logo:hover {
+            color: var(--gold-light);
+        }
+        .nav-logo span {
+            color: var(--cyan);
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.3rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            position: relative;
+            white-space: nowrap;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold);
+            background: rgba(201, 169, 110, 0.06);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 1.5px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after {
+            width: 50%;
+        }
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1001;
+        }
+        .menu-toggle span {
+            display: block;
+            width: 26px;
+            height: 2px;
+            background: var(--gold);
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+        .menu-toggle.open span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .menu-toggle.open span:nth-child(2) {
+            opacity: 0;
+        }
+        .menu-toggle.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(180deg, #08080c 0%, #0d0d16 30%, #11111c 60%, #0a0a0f 100%);
+            overflow: hidden;
+        }
+        .hero-bg-pattern {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(14, 165, 160, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 60%, rgba(201, 169, 110, 0.1) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 80%, rgba(14, 165, 160, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(201, 169, 110, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(201, 169, 110, 0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+        }
+        .hero-logo-main {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 7vw, 6rem);
+            font-weight: 900;
+            letter-spacing: 6px;
+            color: var(--gold);
+            text-shadow: 0 0 80px rgba(201, 169, 110, 0.5), 0 0 160px rgba(201, 169, 110, 0.25);
+            margin-bottom: 0.5rem;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        @keyframes glowPulse {
+            0%,
+            100% {
+                text-shadow: 0 0 80px rgba(201, 169, 110, 0.5), 0 0 160px rgba(201, 169, 110, 0.25);
+            }
+            50% {
+                text-shadow: 0 0 120px rgba(201, 169, 110, 0.7), 0 0 220px rgba(201, 169, 110, 0.4);
+            }
+        }
+        .hero-logo-sub {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            letter-spacing: 8px;
+            color: var(--cyan-light);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+        .hero-slogan {
+            font-family: var(--font-cn);
+            font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+            color: var(--gold-light);
+            letter-spacing: 3px;
+            margin-top: 1.5rem;
+            font-weight: 400;
+            text-shadow: 0 0 30px rgba(232, 213, 163, 0.4);
+            line-height: 1.8;
+        }
+        .hero-slogan .divider {
+            display: inline-block;
+            width: 30px;
+            height: 1px;
+            background: var(--gold);
+            margin: 0 10px;
+            vertical-align: middle;
+            opacity: 0.6;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: bounceDown 2s ease-in-out infinite;
+            cursor: pointer;
+            color: var(--gold);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+        @keyframes bounceDown {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(12px);
+            }
+        }
+
+        .section {
+            padding: 5rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            letter-spacing: 4px;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 0.8rem;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text2);
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+        }
+        .section-line {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+            margin: 0 auto 3rem;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 2.5rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .about-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0.6;
+        }
+        .about-card p {
+            font-size: 1rem;
+            line-height: 2;
+            color: var(--text);
+            letter-spacing: 1px;
+        }
+        .about-card .highlight {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .roster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .player-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            position: relative;
+            text-align: center;
+            padding: 2rem 1.5rem 1.5rem;
+        }
+        .player-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 50px rgba(201, 169, 110, 0.2), 0 0 80px rgba(14, 165, 160, 0.08);
+        }
+        .player-card .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--gold);
+            color: #000;
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+        .player-card .card-badge.sub {
+            background: var(--cyan);
+            color: #000;
+        }
+        .player-card .card-badge.academy {
+            background: #7b5ea7;
+            color: #fff;
+        }
+        .player-card .card-badge.coach {
+            background: #555;
+            color: #ddd;
+        }
+        .player-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #1a1a28, #252535);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border: 3px solid var(--card-border);
+            transition: border-color 0.4s;
+            color: var(--gold);
+            font-family: var(--font-display);
+            font-weight: 700;
+        }
+        .player-card:hover .player-avatar {
+            border-color: var(--gold);
+        }
+        .player-card h3 {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+            font-family: var(--font-display);
+        }
+        .player-card .role {
+            font-size: 0.85rem;
+            color: var(--cyan-light);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .player-card .short-stat {
+            font-size: 0.8rem;
+            color: var(--text2);
+            letter-spacing: 0.5px;
+        }
+        .view-detail {
+            display: inline-block;
+            margin-top: 0.8rem;
+            padding: 6px 16px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            text-decoration: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .view-detail:hover {
+            background: var(--gold);
+            color: #000;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-left: 40px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--gold), var(--cyan), var(--gold));
+            opacity: 0.5;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+            padding-left: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .timeline-item:hover {
+            transform: translateX(6px);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 8px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: 2px solid var(--bg);
+            z-index: 1;
+            transition: all 0.3s;
+        }
+        .timeline-item:hover::before {
+            background: var(--cyan-light);
+            box-shadow: 0 0 16px rgba(14, 165, 160, 0.7);
+            transform: scale(1.3);
+        }
+        .timeline-date {
+            font-size: 0.8rem;
+            color: var(--cyan-light);
+            letter-spacing: 2px;
+            margin-bottom: 0.3rem;
+        }
+        .timeline-title {
+            font-size: 1.1rem;
+            color: var(--gold);
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: var(--text2);
+            margin-top: 0.3rem;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .news-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.35s;
+            position: relative;
+            overflow: hidden;
+        }
+        .news-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-4px);
+        }
+        .news-card .news-tag {
+            display: inline-block;
+            background: rgba(14, 165, 160, 0.2);
+            color: var(--cyan-light);
+            font-size: 0.7rem;
+            padding: 3px 10px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+            margin-bottom: 0.8rem;
+        }
+        .news-card .news-tag.hot {
+            background: rgba(200, 60, 60, 0.25);
+            color: #e04848;
+        }
+        .news-card h4 {
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        .news-card .news-date {
+            font-size: 0.75rem;
+            color: var(--text2);
+            letter-spacing: 1px;
+        }
+        .news-card .news-excerpt {
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .sponsor-strip {
+            background: var(--bg3);
+            border-top: 1px solid rgba(201, 169, 110, 0.2);
+            border-bottom: 1px solid rgba(201, 169, 110, 0.2);
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .sponsor-strip .sponsor-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .sponsor-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text2);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .sponsor-item:hover {
+            color: var(--gold);
+            transform: scale(1.05);
+        }
+        .sponsor-item .sponsor-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: #1a1a24;
+            border: 1px solid #2a2a35;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .sponsor-item:hover .sponsor-icon {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(201, 169, 110, 0.25);
+        }
+
+        .bottom-ad-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background: rgba(10, 10, 16, 0.96);
+            border-top: 2px solid var(--gold);
+            padding: 0.7rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            backdrop-filter: blur(10px);
+            transition: transform 0.4s ease, opacity 0.3s;
+        }
+        .bottom-ad-bar.hidden-ad {
+            transform: translateY(120%);
+        }
+        .bottom-ad-bar .ad-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .bottom-ad-bar .ad-text {
+            color: var(--gold-light);
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+        .bottom-ad-bar .ad-highlight {
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 1rem;
+        }
+        .bottom-ad-bar .ad-close {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 3px;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .bottom-ad-bar .ad-close:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #fff;
+        }
+        .bottom-ad-bar .ad-cta {
+            background: var(--gold);
+            color: #000;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .bottom-ad-bar .ad-cta:hover {
+            background: var(--gold-light);
+            box-shadow: 0 0 20px rgba(201, 169, 110, 0.5);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-content {
+            background: var(--bg3);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            max-width: 750px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            transform: translateY(20px);
+            transition: transform 0.35s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #fff;
+        }
+        .modal-content h2 {
+            font-family: var(--font-display);
+            color: var(--gold);
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-right: 40px;
+        }
+        .modal-content h3 {
+            color: var(--cyan-light);
+            letter-spacing: 1px;
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem;
+        }
+        .modal-content p {
+            color: var(--text);
+            line-height: 1.9;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+        .modal-content .stat-highlight {
+            color: var(--gold-light);
+            font-weight: 600;
+        }
+        .modal-content .divider-detail {
+            width: 40px;
+            height: 1px;
+            background: var(--cyan);
+            margin: 1.2rem 0;
+            opacity: 0.5;
+        }
+        .modal-content ul {
+            list-style: none;
+            padding: 0;
+        }
+        .modal-content ul li {
+            padding: 0.3rem 0;
+            color: var(--text);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+        .modal-content ul li::before {
+            content: '◆';
+            color: var(--gold);
+            margin-right: 8px;
+            font-size: 0.6rem;
+        }
+
+        .recruit-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 750px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        .recruit-box h3 {
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        .recruit-box .highlight-salary {
+            font-size: 1.6rem;
+            color: var(--cyan-light);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .recruit-box ul {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        .recruit-box ul li {
+            padding: 0.5rem 0;
+            color: var(--text);
+            letter-spacing: 0.5px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .recruit-box ul li::before {
+            content: '✦';
+            color: var(--gold);
+            margin-right: 8px;
+        }
+        .recruit-box .threshold-warning {
+            color: #e04848;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
+        }
+        .btn-contact {
+            display: inline-block;
+            background: var(--gold);
+            color: #000;
+            padding: 10px 28px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            margin-top: 0.5rem;
+        }
+        .btn-contact:hover {
+            background: var(--gold-light);
+            box-shadow: 0 0 30px rgba(201, 169, 110, 0.5);
+        }
+
+        footer {
+            background: #060608;
+            border-top: 1px solid rgba(201, 169, 110, 0.2);
+            text-align: center;
+            padding: 3rem 1rem;
+            letter-spacing: 1px;
+            color: var(--text2);
+            font-size: 0.85rem;
+            margin-bottom: 60px;
+        }
+        footer .footer-email {
+            color: var(--cyan-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        footer .footer-email:hover {
+            color: var(--gold);
+        }
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .social-item {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .social-item:hover {
+            color: var(--gold-light);
+            transform: translateY(-2px);
+        }
+        .social-item .social-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .social-dot.huya {
+            background: #ff6b00;
+        }
+        .social-dot.wechat {
+            background: #07c160;
+        }
+        .social-dot.weibo {
+            background: #e6162d;
+        }
+        .social-dot.douyin {
+            background: #ff0050;
+        }
+        .social-dot.bilibili {
+            background: #00a1d6;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 260px;
+                height: 100vh;
+                background: rgba(10, 10, 14, 0.97);
+                flex-direction: column;
+                padding: 80px 1.5rem 2rem;
+                gap: 0.8rem;
+                transition: right 0.4s ease;
+                border-left: 1px solid rgba(201, 169, 110, 0.3);
+                backdrop-filter: blur(20px);
+            }
+            .nav-links.open {
+                right: 0;
+            }
+            .nav-links a {
+                font-size: 1rem;
+                padding: 0.7rem 1rem;
+                display: block;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            .roster-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 1rem;
+            }
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 3rem 1rem;
+            }
+            .bottom-ad-bar {
+                font-size: 0.75rem;
+                padding: 0.5rem;
+                gap: 0.5rem;
+            }
+            .modal-content {
+                padding: 1.2rem;
+                max-height: 90vh;
+            }
+            .sponsor-logos {
+                gap: 1.2rem;
+            }
+            .social-links {
+                gap: 0.8rem;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-logo-main {
+                font-size: 2rem;
+                letter-spacing: 3px;
+            }
+            .hero-slogan {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
+            }
+            .roster-grid {
+                grid-template-columns: 1fr;
+            }
+            .player-card {
+                padding: 1.5rem 1rem;
+            }
+            .timeline {
+                padding-left: 25px;
+            }
+            .timeline-item::before {
+                left: -19px;
+                width: 10px;
+                height: 10px;
+            }
+            .sponsor-logos {
+                gap: 1rem;
+            }
+            .recruit-box {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="#home" class="nav-logo">MC<span>Z</span></a>
+            <button class="menu-toggle" id="menuToggle" aria-label="菜单"><span></span><span></span><span></span></button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="active">首页</a></li>
+                <li><a href="#roster">战队</a></li>
+                <li><a href="#players-section">选手</a></li>
+                <li><a href="#history">历史</a></li>
+                <li><a href="#news">新闻</a></li>
+                <li><a href="#contact">联系我们</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-bg-pattern"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-content">
+            <div class="hero-logo-main">MCZGAME</div>
+            <div class="hero-logo-sub">Mudanjiang Creation Zenith</div>
+            <div class="hero-slogan">国家富强<span class="divider"></span>民族振兴<span class="divider"></span>我尽己任</div>
+        </div>
+        <div class="scroll-indicator" onclick="document.getElementById('roster').scrollIntoView({behavior:'smooth'})">▼ 探索MCZ</div>
+    </section>
+
+    <section class="section" id="roster">
+        <h2 class="section-title">战队介绍</h2>
+        <p class="section-subtitle">About MCZ Esports</p>
+        <div class="section-line"></div>
+        <div class="about-card">
+            <p><span class="highlight">MCZ电子竞技俱乐部</span>（英文全称：<strong>Mudanjiang Creation Zenith Esports Club</strong>，中文全称：牡丹江创世巅峰电子竞技俱乐部），是全球公认的顶级电子竞技组织之一，总部设于中国黑龙江省牡丹江市。MCZ以其独特的战术哲学、系统化青训体系及对赛事数据的前沿应用闻名，旗下拥有《反恐精英》、《英雄联盟》、《绝地求生》、《Apex英雄》等多个分部。</p>
+            <p style="margin-top:1rem;">作为俱乐部的核心与旗舰，<span class="highlight">MCZ CS分部</span>以2021年集结的核心阵容为班底组建，凭借六名长期垄断完美世界竞技平台、5EPlay对战平台、B5对战平台及浩方对战平台总分榜首的选手，加之在R0对战平台与CS官方匹配全球排行榜上持续霸榜的表现，迅速从线上赛事席卷世界职业赛场，被媒体誉为<span style="color:var(--cyan-light);">"战术与枪法双重超维的东方军团"</span>。</p>
+        </div>
+    </section>
+
+    <section class="section" id="players-section">
+        <h2 class="section-title">主力阵容</h2>
+        <p class="section-subtitle">Starting Roster · MCZ CS Division</p>
+        <div class="section-line"></div>
+        <div class="roster-grid">
+            <div class="player-card" onclick="openModal('modal-black')"><span class="card-badge">首发·突破手</span><div class="player-avatar">BL</div><h3>MCZb1ack</h3><p class="role">突击手 · Entry Fragger</p><p class="short-stat">完美RATING 2.89 | 首杀成功率83%</p><span class="view-detail">查看详情 →</span></div>
+            <div class="player-card" onclick="openModal('modal-lele')"><span class="card-badge">首发·主狙</span><div class="player-avatar">LL</div><h3>MCZlele</h3><p class="role">狙击手/副指挥 · AWPer</p><p class="short-stat">狙神榜900天榜首 | 反应0.072s</p><span class="view-detail">查看详情 →</span></div>
+            <div class="player-card" onclick="openModal('modal-baik')"><span class="card-badge">首发·自由人</span><div class="player-avatar">BK</div><h3>MCZbaik</h3><p class="role">自由人/副指挥 · Lurker</p><p class="short-stat">残局胜率79.3% | 消音击杀40万+</p><span class="view-detail">查看详情 →</span></div>
+            <div class="player-card" onclick="openModal('modal-maoc')"><span class="card-badge">首发·副狙</span><div class="player-avatar">MC</div><h3>MCZmaoc</h3><p class="role">狙击手/补枪手 · Support Sniper</p><p class="short-stat">补枪成功率98% | AWP场均12.7杀</p><span class="view-detail">查看详情 →</span></div>
+            <div class="player-card" onclick="openModal('modal-sheng')"><span class="card-badge">首发·补枪</span><div class="player-avatar">SH</div><h3>MCZ Sheng</h3><p class="role">突击手/补枪手 · Rifler</p><p class="short-stat">RATING峰值1.43 | 自由人评分前五</p><span class="view-detail">查看详情 →</span></div>
+            <div class="player-card" onclick="openModal('modal-xiaoyu')"><span class="card-badge sub">次发·自由人</span><div class="player-avatar">XY</div><h3>MCZxiaoyu</h3><p class="role">补枪手/自由人 · 轮换第六人</p><p class="short-stat">手枪局胜率91% | 冲锋枪击杀纪录</p><span class="view-detail">查看详情 →</span></div>
+            <div class="player-card" onclick="openModal('modal-dsxr')"><span class="card-badge academy">青训·次发</span><div class="player-avatar">DS</div><h3>MCZdsxr</h3><p class="role">突击手/自由人 · 青训营优秀毕业生</p><p class="short-stat">青训营综合评分第一 | 5E天梯TOP18</p><span class="view-detail">查看详情 →</span></div>
+            <div class="player-card" onclick="openModal('modal-tutu')"><span class="card-badge sub">替补</span><div class="player-avatar">TT</div><h3>MCZtutu</h3><p class="role">替补 · Substitute</p><p class="short-stat">全武器大师 | RATING峰值1.25</p><span class="view-detail">查看详情 →</span></div>
+            <div class="player-card" onclick="openModal('modal-coach')"><span class="card-badge coach">教练</span><div class="player-avatar">LB</div><h3>MCZ LiuBing</h3><p class="role">主教练/战术总监 · Head Coach</p><p class="short-stat">战术评分体系创始人 | 前MCZ指挥</p><span class="view-detail">查看详情 →</span></div>
+        </div>
+    </section>
+
+    <section class="section" id="history">
+        <h2 class="section-title">比赛历史与荣誉</h2>
+        <p class="section-subtitle">Tournament History & Achievements</p>
+        <div class="section-line"></div>
+        <div class="timeline">
+            <div class="timeline-item" onclick="openModal('modal-timeline1')"><div class="timeline-date">2021年 · 建队元年</div><div class="timeline-title">MCZ CS分部正式成立</div><div class="timeline-desc">核心阵容集结，横扫国内四大平台天梯榜首，开启线上统治时代。点击查看详情。</div></div>
+            <div class="timeline-item" onclick="openModal('modal-timeline2')"><div class="timeline-date">2023年 · PPL S2 & S3</div><div class="timeline-title">完美平台PPL联赛双冠王</div><div class="timeline-desc">连续两赛季3:0横扫TYLOO夺冠，三图合计仅让对手拿到11分。点击查看详情。</div></div>
+            <div class="timeline-item" onclick="openModal('modal-timeline3')"><div class="timeline-date">2023年 · 诸神之战</div><div class="timeline-title">125连胜直播冲分</div><div class="timeline-desc">从青铜段位直播单排，全程未失一局直抵天梯前十，举报系统两次宕机。点击查看详情。</div></div>
+            <div class="timeline-item" onclick="openModal('modal-timeline4')"><div class="timeline-date">2024年 · IEM卡托维兹</div><div class="timeline-title">外卡赛晋级正赛，惜败FaZe</div><div class="timeline-desc">b1ack打出RATING 3.12的统治级表现，四分之一决赛14:16憾负。点击查看详情。</div></div>
+            <div class="timeline-item" onclick="openModal('modal-timeline5')"><div class="timeline-date">2024年 · ESL挑战者联赛</div><div class="timeline-title">复仇MOUZ夺冠</div><div class="timeline-desc">胜者组决赛因tutu失误跌入败者组后，Sheng顶替首发完成复仇，3:1夺冠。点击查看详情。</div></div>
+            <div class="timeline-item" onclick="openModal('modal-timeline6')"><div class="timeline-date">2024年 · 上海Major</div><div class="timeline-title">四强，距决赛仅差两分</div><div class="timeline-desc">2:0击败G2 Esports，半决赛14:16惜败FaZe Clan。点击查看详情。</div></div>
+            <div class="timeline-item" onclick="openModal('modal-timeline7')"><div class="timeline-date">2025年 · BLAST奥斯汀Major</div><div class="timeline-title">16强淘汰赛激战Spirit</div><div class="timeline-desc">lele与donk正面对决5:3优势，b1ack残局仅差0.07秒。点击查看详情。</div></div>
+        </div>
+    </section>
+
+    <section class="section" id="news">
+        <h2 class="section-title">最新新闻</h2>
+        <p class="section-subtitle">MCZ News & Announcements</p>
+        <div class="section-line"></div>
+        <div class="news-grid">
+            <div class="news-card" onclick="openModal('modal-news1')"><span class="news-tag hot">重磅转会</span><h4>MCZ正酝酿重大收购——目标锁定欧洲劲旅核心选手</h4><p class="news-date">2026年6月28日</p><p class="news-excerpt">据内部消息，MCZ管理层正在与一支欧洲顶级战队进行深度谈判，计划收购并买断其核心选手……</p></div>
+            <div class="news-card" onclick="openModal('modal-news2')"><span class="news-tag">赛事预告</span><h4>MCZ确认参加2026年EWC电竞世界杯</h4><p class="news-date">2026年6月20日</p><p class="news-excerpt">俱乐部已收到沙特电竞世界杯组委会的正式邀请函，将以种子队伍身份直接进入小组赛阶段。</p></div>
+            <div class="news-card" onclick="openModal('modal-news3')"><span class="news-tag">青训招募</span><h4>MCZ青训营2026夏季招募启动——薪资标准大幅提升</h4><p class="news-date">2026年6月15日</p><p class="news-excerpt">本轮青训招募门槛历史最高，月薪起薪高达行业内顶尖水平，详情请查看招募公告。</p></div>
+            <div class="news-card" onclick="openModal('modal-news4')"><span class="news-tag">品牌合作</span><h4>MCZ与Red Bull红牛达成战略赞助协议</h4><p class="news-date">2026年5月30日</p><p class="news-excerpt">红牛正式成为MCZ官方能量饮料合作伙伴，双方将在赛事、内容及青训领域展开深度合作。</p></div>
+        </div>
+    </section>
+
+    <div class="sponsor-strip">
+        <p style="color:var(--text2);letter-spacing:2px;margin-bottom:1.2rem;font-size:0.8rem;">官方合作伙伴 · OFFICIAL PARTNERS</p>
+        <div class="sponsor-logos">
+            <div class="sponsor-item" onclick="openModal('modal-sponsor-redbull')"><div class="sponsor-icon" style="color:#e63946;">RB</div><span>Red Bull</span></div>
+            <div class="sponsor-item" onclick="openModal('modal-sponsor-logitech')"><div class="sponsor-icon" style="color:#00b8fc;">G</div><span>Logitech G</span></div>
+            <div class="sponsor-item" onclick="openModal('modal-sponsor-intel')"><div class="sponsor-icon" style="color:#0071c5;">IN</div><span>Intel</span></div>
+            <div class="sponsor-item" onclick="openModal('modal-sponsor-monster')"><div class="sponsor-icon" style="color:#00a651;">MT</div><span>Monster</span></div>
+            <div class="sponsor-item" onclick="openModal('modal-sponsor-nvidia')"><div class="sponsor-icon" style="color:#76b900;">NV</div><span>NVIDIA</span></div>
+            <div class="sponsor-item" onclick="openModal('modal-sponsor-hyperx')"><div class="sponsor-icon" style="color:#e2231a;">HX</div><span>HyperX</span></div>
+            <div class="sponsor-item" onclick="openModal('modal-sponsor-dxracer')"><div class="sponsor-icon" style="color:#f5a623;">DX</div><span>DXRacer</span></div>
+            <div class="sponsor-item" onclick="openModal('modal-sponsor-huya')"><div class="sponsor-icon" style="color:#ff6b00;">虎</div><span>虎牙直播</span></div>
+        </div>
+    </div>
+
+    <section class="section" id="contact">
+        <h2 class="section-title">联系我们</h2>
+        <p class="section-subtitle">Contact & Recruitment</p>
+        <div class="section-line"></div>
+        <div class="recruit-box">
+            <h3>🔥 MCZ青训营 · 2026夏季招募（门槛全面升级）</h3>
+            <p class="highlight-salary">月薪起薪：¥55,000 - ¥120,000 CNY</p>
+            <p style="color:var(--text);margin:0.5rem 0;">（表现优异者可获签约奖金 <strong>¥200,000起</strong>，顶级苗子可面议）</p>
+            <p class="threshold-warning">⚠ 本轮招募门槛为MCZ历史最高，仅接受真正具备职业潜力的顶尖玩家</p>
+            <ul>
+                <li><strong>平台硬性要求：</strong>完美世界竞技平台RATING ≥ <span style="color:#e04848;">1.90</span>，且5E天梯<span style="color:#e04848;">TOP20</span>以内，或B5平台赛季RATING ≥ <span style="color:#e04848;">1.75</span></li>
+                <li><strong>数据追溯审核：</strong>需提供至少<span style="color:#e04848;">80场</span>高强度对战完整录像（含Demo文件），由MCZ数据团队进行AI反作弊回溯验证，任何异常数据直接永久拉黑</li>
+                <li><strong>年龄限制：</strong>16-20周岁（特别优异者经教练组全票通过可放宽至21岁，但需额外通过体能及心理加试）</li>
+                <li><strong>训练强度：</strong>每日不低于<span style="color:#e04848;">12小时</span>系统化训练，每周6天，接受MCZ战术体系全面考核，试用期3个月</li>
+                <li><strong>心理与体能：</strong>需通过MCZ专属抗压心理评估（心率变异性测试、压力情境决策测试）及基础体能考核（反应速度、耐力指标）</li>
+                <li><strong>英语要求：</strong>雅思<span style="color:#e04848;">6.0</span>或同等水平以上，需通过MCZ英语面试（含战术术语理解与国际赛事沟通模拟）</li>
+                <li><strong>团队协作评估：</strong>需完成MCZ安排的团队配合测试赛，由教练组及首发选手联合评分</li>
+                <li><strong>背景审查：</strong>需提供无违规记录证明，任何平台封禁历史需如实申报，隐瞒者永久取消资格</li>
+                <li><strong>住宿与保障：</strong>提供牡丹江总部基地全套住宿、营养餐食及专业体能训练设施</li>
+                <li><strong>晋升通道：</strong>青训营考核优异者直接进入MCZ次发阵容，享有国际赛事出场机会及正式签约合同</li>
+            </ul>
+            <p style="color:var(--text2);margin-top:1rem;font-size:0.85rem;">商务合作 / 青训报名邮箱：<a href="mailto:mczesports@111631.xyz" style="color:var(--cyan-light);text-decoration:none;">mczesports@111631.xyz</a></p>
+            <a href="mailto:mczesports@111631.xyz" class="btn-contact">立即报名</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2021-2026 MCZ电子竞技俱乐部 · Mudanjiang Creation Zenith Esports Club</p>
+        <p>总部：中国黑龙江省牡丹江市 | 商务邮箱：<a href="mailto:mczesports@111631.xyz" class="footer-email">mczesports@111631.xyz</a></p>
+        <div class="social-links">
+            <a href="#" class="social-item" onclick="openModal('modal-social-huya');return false;"><span class="social-dot huya"></span>🎮 虎牙直播间：MCZ_Official（房间号：886688）</a>
+            <a href="#" class="social-item" onclick="openModal('modal-social-wechat');return false;"><span class="social-dot wechat"></span>📱 微信公众号：MCZ电子竞技俱乐部</a>
+            <a href="#" class="social-item" onclick="openModal('modal-social-weibo');return false;"><span class="social-dot weibo"></span>📷 微博：@MCZ电子竞技俱乐部</a>
+            <a href="#" class="social-item" onclick="openModal('modal-social-douyin');return false;"><span class="social-dot douyin"></span>🎵 抖音：MCZ_Esports</a>
+            <a href="#" class="social-item" onclick="openModal('modal-social-bilibili');return false;"><span class="social-dot bilibili"></span>📺 B站：MCZ电子竞技俱乐部官方</a>
+        </div>
+        <p style="font-size:0.7rem;opacity:0.5;margin-top:1rem;">MCZ · 国家富强 · 民族振兴 · 我尽己任</p>
+    </footer>
+
+    <div class="bottom-ad-bar" id="bottomAdBar">
+        <div class="ad-content"><span style="font-size:1.3rem;">🖱️</span><span class="ad-highlight">Logitech G502 X PLUS</span><span class="ad-text">· LIGHTFORCE混合微动 · LIGHTSPEED无线 · HERO 25K传感器</span><button class="ad-cta" onclick="openModal('modal-logitech')">了解详情</button></div>
+        <button class="ad-close" onclick="closeBottomAd()" title="关闭广告">✕ 关闭</button>
+    </div>
+
+    <!-- ==================== 选手弹窗 ==================== -->
+    <div class="modal-overlay" id="modal-black"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-black')">✕</button><h2>MCZb1ack · 曹睿轩</h2><p><strong>位置：</strong>突破手 · Entry Fragger | <strong>国籍：</strong>中国 | <strong>加入MCZ：</strong>2021年（创始成员）</p><div class="divider-detail"></div><h3>平台统治与数据</h3><p>完美世界竞技平台历史最高<span class="stat-highlight">RATING 2.89</span>；5E天梯第一赛季至第十七赛季累计榜首；B5对战平台历史击杀效率值榜首；R0对战平台S8赛季首杀成功率纪录保持者；浩方对战平台怀旧服传奇勋章持有者；官匹全球段位长期维持小地球最高段位。</p><h3>选手简介</h3><p>本名曹睿轩（Cao Ruixuan），黑龙江牡丹江人，是MCZ阵中公认的最强突破利刃。MCZb1ack的突破并非传统的拉枪线，而是建立在毫秒级预瞄与绝对首发命中率之上的线性摧毁。在完美平台S19赛季，他使用AK-47单月完成<span class="stat-highlight">410次首杀</span>，首杀成功率高达<span class="stat-highlight">83%</span>，其精准的定位一度被5E反作弊系统多次误判为AI自瞄，最终由官方出具"人类操作认证"以平息风波。</p><p>2024年IEM卡托维兹外卡赛对阵Team Spirit的Ancient地图上，MCZb1ack半场砍下<span class="stat-highlight">34杀、RATING 3.12</span>，于B包点烟雾中数次将donk击杀，迫使donk赛后公开感叹其枪法犹如"预知未来"。在同年的完美平台PPL S3决赛对阵国内传统强队TYLOO时，b1ack在Inferno单人突破B区完成三次ACE，三图累计RATING 2.35，TYLOO指挥赛后称其突破"如同打开一扇根本不存在的门"。在国际二线强队面前，他的压制力同样恐怖——2024年ESL挑战者联赛对阵德国劲旅BIG，b1ack在Dust2长门连续三次干拉秒杀tabseN，直接导致BIG教练暂停并彻底更换防守站位。2025年BLAST奥斯汀Major第30局，b1ack在1V2残局中先秒sh1ro，却在C4起爆前<span class="stat-highlight">0.07秒</span>被反杀，该残局成为当年最具争议的赛事瞬间之一。</p><h3>主要荣誉</h3><ul><li>2023年PPL S2冠军 · 系列赛RATING 2.01</li><li>2023年PPL S3冠军 · 三图ACE纪录保持者</li><li>2024年IEM卡托维兹外卡赛MVP</li><li>2024年ESL挑战者联赛总冠军</li><li>2024年上海Major四强</li><li>5E平台十七赛季累计榜首（历史唯一）</li><li>完美平台历史RATING纪录保持者（2.89）</li></ul></div></div>
+
+    <div class="modal-overlay" id="modal-lele"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-lele')">✕</button><h2>MCZlele · 薛琪乐</h2><p><strong>位置：</strong>主狙击手/副指挥 · AWPer | <strong>国籍：</strong>中国 | <strong>加入MCZ：</strong>2021年（创始成员）</p><div class="divider-detail"></div><h3>平台统治与数据</h3><p>5E平台狙神榜连续<span class="stat-highlight">900天榜首</span>；完美平台狙击反应速度测试世界纪录保持者（<span class="stat-highlight">0.072秒</span>）；B5平台AWP击杀效率值全服第一；官匹竞技模式狙击枪爆头率赛季均值<span class="stat-highlight">71%</span>。</p><h3>选手简介</h3><p>本名薛琪乐（Xue Qile），被全球媒体称为"来自东方的死神"。MCZlele的狙击镜决策时间极短，开镜即造成减员，几乎违背常规反应极限。作为副指挥，他与MCZbaik共同承担战场决策，擅长在回合开局10秒内根据对方经济配置、出生站位和狙击习惯直接下达最优战术指令。2025年BLAST奥斯汀Major预选赛，lele在Overpass工地手持SSG 08完成<span class="stat-highlight">1V4残局</span>，最后一击在完全致盲状态下听声盲狙击杀Falcons指挥karrigan，该片段在YouTube单周播放量突破<span class="stat-highlight">2亿次</span>。面对国内霸主TYLOO，lele在PPL S3半决赛的Mirage中路连续盲狙穿烟击杀两人，随后在B二楼瞬镜连秒三人，单图AWP击杀29个，被TYLOO粉丝称为"中路天灾"。其卓越的空间计算能力，使他能将弹道与抛物线公式直接融入临场判断。2024年CCT中欧对抗赛上，lele在Overpass以AWP完成1V5残局，入选HLTV年度最佳残局候选。在2024年上海Major对阵G2的四分之一决赛中，lele全场AWP击杀<span class="stat-highlight">47个</span>，Rating高达1.62。</p><h3>主要荣誉</h3><ul><li>5E狙神榜连续900天榜首（历史纪录）</li><li>完美平台狙击反应速度世界纪录（0.072秒）</li><li>2024年CCT中欧对抗赛1V5残局 · HLTV年度最佳残局候选</li><li>2023年PPL S2/S3双冠 · 主狙核心</li><li>2024年上海Major四强</li><li>YouTube单视频播放量2亿+（盲狙karrigan）</li></ul></div></div>
+
+    <div class="modal-overlay" id="modal-baik"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-baik')">✕</button><h2>MCZbaik · 詹百宽</h2><p><strong>位置：</strong>自由人/副指挥 · Lurker | <strong>国籍：</strong>中国 | <strong>加入MCZ：</strong>2021年（创始成员）</p><div class="divider-detail"></div><h3>平台统治与数据</h3><p>完美平台残局之王（残局胜率<span class="stat-highlight">79.3%</span>）；5E平台单赛季抓Timing成功次数吉尼斯世界纪录申报者；R0对战平台残局1VN胜率历史榜首；B5平台年度最佳自由人连续三届获得者。</p><h3>选手简介</h3><p>本名詹百宽（Zhan Baikuan），是MCZ战术体系的黑暗核心。作为自由人与副指挥，MCZbaik负责在战场弱侧进行渗透与信息扰乱，与MCZlele形成阴阳互补的指挥架构。他擅长以违背常规逻辑的静默游走撕裂对手防线，在2025年对阵G2的表演赛上，他作为防守方从A区静步摸至匪家，耗时<span class="stat-highlight">2分11秒</span>未发出任何声响，最终在敌后连刀三人，迫使G2俱乐部向赛事方提出抗议。在国内赛场上，baik的"灵异走位"是TYLOO与RA等队的噩梦——2023年PPL S2决赛对阵TYLOO时，baik连续三局在Inferno大坑到匪口的区域静步抄后，导致TYLOO的经济系统彻底崩溃。面对国际二线队伍GamerLegion，他在Overpass厕所单人连续击杀三人，将一场6:12的劣势逆转为16:14的胜利。baik是队内唯一可在实时比赛中修正lele指令的选手，两人通过一套加密的战术暗语交流，整套指挥语言至今未被任何战队破译。其USP-S消音手枪在5E平台累计击杀已逾<span class="stat-highlight">40万</span>，被外界称为"默剧杀手"。</p><h3>主要荣誉</h3><ul><li>完美平台残局之王 · 残局胜率79.3%</li><li>B5平台年度最佳自由人三连冠</li><li>5E平台USP-S累计击杀40万+</li><li>2023年PPL S2/S3双冠</li><li>2024年ESL挑战者联赛总冠军</li><li>2024年上海Major四强</li></ul></div></div>
+
+    <div class="modal-overlay" id="modal-maoc"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-maoc')">✕</button><h2>MCZmaoc · 金勇汉</h2><p><strong>位置：</strong>副狙击手/专职补枪 · Support Sniper | <strong>国籍：</strong>中国 | <strong>加入MCZ：</strong>2021年（创始成员）</p><div class="divider-detail"></div><h3>平台统治与数据</h3><p>浩方对战平台历史总击杀榜第一；完美世界竞技平台狙击枪爆头率<span class="stat-highlight">63%</span>；B5平台狙击手K-D比历史前十；R0对战平台年度最佳副狙提名；官匹竞技模式AWP场均击杀<span class="stat-highlight">12.7</span>。</p><h3>选手简介</h3><p>本名金勇汉（Jin Yonghan）。MCZmaoc是世界上唯一被HLTV定义为<span class="stat-highlight">"补枪型狙击手"</span>的存在。他几乎永远出现在队友阵亡后0.2秒的时间窗口，用一记迅猛的AWP开镜将正在换弹或转点的敌人带走，补枪成功率高达<span class="stat-highlight">98%</span>，综合RATING稳定在1.45区间，属全球副狙顶级水准。2024年EWC电竞世界杯对阵Falcons的Nuke比赛中，maoc于外场红箱连续补掉NiKo和Magisk，全程仅消耗<span class="stat-highlight">两发子弹</span>，RATING达到1.67。在PPL S3对阵TYLOO的Train上，maoc在红楼梯连续补掉对方主狙和突破手，两次射击间隔仅<span class="stat-highlight">1.3秒</span>。对阵南美二线强队9z的IEM预选赛上，maoc补枪成功率100%，单图RATING 1.72。作为浩方平台的活化石，他曾独自守护房间"黑龙江高手1"，创造连续在线<span class="stat-highlight">4276小时</span>的不败神话。2024年石油杯预选赛决赛第四个加时第56局，maoc完成跳狙穿门击杀，但系统判定命中点距爆头线仅差0.1个模型单位未能致命，成为赛事经典瞬间。</p><h3>主要荣誉</h3><ul><li>浩方对战平台历史总击杀榜第一</li><li>HLTV定义全球唯一"补枪型狙击手"</li><li>补枪成功率98%（世界纪录级别）</li><li>2024年EWC电竞世界杯对阵Falcons · RATING 1.67</li><li>浩方"黑龙江高手1"房间连续在线4276小时不败</li></ul></div></div>
+
+    <div class="modal-overlay" id="modal-sheng"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sheng')">✕</button><h2>MCZ Sheng · 孟学生</h2><p><strong>位置：</strong>突击手/补枪手 · Rifler | <strong>国籍：</strong>中国 | <strong>加入MCZ：</strong>2022年（首发阵容）</p><div class="divider-detail"></div><h3>平台统治与数据</h3><p>完美世界竞技平台历史RATING峰值<span class="stat-highlight">1.43</span>；5E天梯Top100常驻；B5平台赛季自由人位置RATING排名前三；R0对战平台自由人综合评分全服前五。</p><h3>选手简介</h3><p>本名孟学生（Meng Xuesheng），黑龙江牡丹江人，是MCZ阵容体系中的机动补枪位兼自由人轮换。MCZ Sheng的定位介于maoc与baik之间，既能承担高精度的正面补枪任务，亦可在弱侧独立执行渗透与信息搜集。他的枪械池覆盖面极广，RATING长期稳定在<span class="stat-highlight">1.40以上</span>，与主力maoc的数据处于同一梯队。2024年ESL挑战者联赛败者组决赛，在队伍因MCZtutu失误意外跌入败者组后，Sheng以次发身份顶住压力首发，在Ancient复仇MOUZ的比赛中打出<span class="stat-highlight">1.48 RATING</span>，助队伍2:1逆转晋级。在PPL S3小组赛对阵RA时，他轮换出场在Nuke外场拿下三次多杀，以1.51 RATING收尾。尽管在早期比赛中曾坐在次发席，但Sheng的实力在大量二线队首发阵容中均可稳居核心，被评论员称为"任何一支战队都梦寐以求的第六张牌"。2025年，随着MCZ阵容调整，Sheng正式升入首发阵容，成为MCZ主力五人之一。在2025年BLAST奥斯汀Major小组赛阶段，Sheng在Ancient地图上贡献了<span class="stat-highlight">1.39的全场RATING</span>，是MCZ小组出线的关键功臣之一。</p><h3>主要荣誉</h3><ul><li>2024年ESL挑战者联赛总冠军（败者组决赛MVP级别表现）</li><li>2024年上海Major四强</li><li>PPL S3对阵RA · 单图RATING 1.51</li><li>完美平台历史RATING峰值1.43</li><li>2025年正式升入MCZ首发阵容</li></ul></div></div>
+
+    <div class="modal-overlay" id="modal-xiaoyu"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-xiaoyu')">✕</button><h2>MCZxiaoyu · 于连峰</h2><p><strong>位置：</strong>补枪手/自由人（轮换第六人）· 次发阵容 | <strong>国籍：</strong>中国 | <strong>加入MCZ：</strong>2022年</p><div class="divider-detail"></div><h3>平台统治与数据</h3><p>完美平台冲锋枪击杀纪录保持者；5E平台手枪局胜率<span class="stat-highlight">91%</span>；B5平台近战武器击杀效率榜首；官匹短时赛模式场均RATING <span class="stat-highlight">1.78</span>。</p><h3>选手简介</h3><p>本名于连峰（Yu Lianfeng），MCZxiaoyu是MCZb1ack的影子，也是MCZ体系容错率的最终保障。他在b1ack撕开裂缝后，以极高的近身清剿效率完成残敌收割，其MAC-10和XM1014的使用已被列入多家电竞研究机构的案例。在2024年上海Major四分之一决赛对阵G2的关键回合中，b1ack被三人集火后，xiaoyu从香蕉道滑铲而出，使用MAG-7三连喷瞬秒三人，整个过程仅<span class="stat-highlight">1.04秒</span>，赛事OB系统甚至未能完整捕捉其准星轨迹。xiaoyu性格沉静，以极端冷静的心理素质著称，能在高压环境下维持极低的心率变异性，从而保证操作精度。在2024年ESL挑战者联赛对阵BIG的Nuke上，他一度在B区管道内用MP9连续刷屏四人，将人数劣势瞬间扳平，被BIG教练称为<span class="stat-highlight">"管道恶魔"</span>。作为MCZ的轮换第六人，xiaoyu虽然不是每场首发，但在关键时刻的出场往往能改变比赛走向。他的手枪局表现尤为突出——在5E平台上，手枪局胜率高达91%，这一数据在全部职业选手中位列前茅。</p><h3>主要荣誉</h3><ul><li>完美平台冲锋枪击杀纪录保持者（历史）</li><li>5E平台手枪局胜率91%</li><li>2024年上海Major四强 · 1.04秒MAG-7三杀名场面</li><li>2024年ESL挑战者联赛总冠军</li><li>BIG教练认证"管道恶魔"</li></ul></div></div>
+
+    <!-- MCZdsxr 青训次发选手弹窗 -->
+    <div class="modal-overlay" id="modal-dsxr"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-dsxr')">✕</button><h2>MCZdsxr · 董思贤</h2><p><strong>位置：</strong>突击手/自由人（次发阵容）· 青训营优秀毕业生 | <strong>国籍：</strong>中国 | <strong>加入MCZ：</strong>2025年（青训营2024届第一名毕业）</p><div class="divider-detail"></div><h3>平台数据与成长轨迹</h3><p>完美世界竞技平台历史RATING峰值<span class="stat-highlight">1.42</span>；5E天梯最高排名<span class="stat-highlight">第18位</span>；B5平台赛季自由人RATING排名前八；R0对战平台年度新秀提名；官匹竞技模式RATING稳定在<span class="stat-highlight">1.35</span>以上。</p><h3>选手简介</h3><p>本名董思贤（Dong Sixian），吉林长春人，出生于2006年，是MCZ青训营2024届综合评分<span class="stat-highlight">第一名</span>的毕业生。MCZdsxr于2023年通过严苛的青训选拔进入MCZ青训体系，在为期一年的封闭训练中展现出惊人的成长速度与学习能力。他的枪法风格融合了b1ack的精准预瞄与xiaoyu的近身清剿效率，虽尚不及首发主力的稳定输出，但其潜力被教练LiuBing评价为<span class="stat-highlight">"MCZ未来五年的核心培养对象"</span>。</p><p>在青训营期间，dsxr在内部对抗赛中多次与首发阵容交锋，曾在一次训练赛中使用AK-47在Inferno单图拿下<span class="stat-highlight">31杀</span>，其中包含两次1V3残局，令b1ack赛后主动向教练组推荐其进入轮换阵容。2025年初，dsxr正式从青训营毕业，进入MCZ次发阵容，成为继xiaoyu之后第二位轮换选手。在2025年BLAST奥斯汀Major的集训备战中，dsxr作为陪练多次模拟对手战术，其出色的执行力与快速适应能力赢得了全队的一致认可。</p><p>dsxr的性格沉稳谦逊，与xiaoyu相似，在高压环境下能保持极低的情绪波动。他的枪械池以AK-47和M4A4为主，同时具备一定的AWP使用能力，是一名具备多位置适应性的全能型选手。教练组对他的定位是<span class="stat-highlight">"未来自由人/突击手双能位"</span>——既能在baik轮休时承担弱侧渗透任务，也能在需要时顶替b1ack的突破位置。在2026年MCZ的战术蓝图中，dsxr被视为阵容深度的重要保障，预计将在未来两年内获得越来越多的国际赛事出场机会。</p><h3>青训营荣誉与数据</h3><ul><li>MCZ青训营2024届综合评分第一名（历史最高分）</li><li>青训营内部对抗赛Inferno单图31杀纪录保持者</li><li>5E天梯最高排名第18位（青训期间达成）</li><li>R0对战平台年度新秀提名</li><li>2025年正式进入MCZ次发阵容</li><li>完美平台RATING峰值1.42（青训选手顶尖水平）</li><li>教练组评价："MCZ未来五年的核心培养对象"</li></ul></div></div>
+
+    <div class="modal-overlay" id="modal-tutu"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-tutu')">✕</button><h2>MCZtutu · 张展图</h2><p><strong>位置：</strong>替补 · Substitute | <strong>国籍：</strong>中国 | <strong>加入MCZ：</strong>2021年</p><div class="divider-detail"></div><h3>平台数据</h3><p>5E平台全武器大师称号（所有枪械击杀均过万）；完美平台历史RATING峰值1.25；B5平台替补出战赛季平均RATING 1.08；官匹竞技模式RATING 1.15。</p><h3>选手简介</h3><p>本名张展图（Zhang Zhantu）。MCZtutu是队伍中经验最丰富的成员之一，曾因其全面的枪械适应性与英语沟通能力被保留在轮换边缘。然而随着MCZ整体枪法水准的急剧提升，tutu在正面火力上的劣势逐渐暴露。他最为人熟知的不是高光而是致命失误——在2024年ESL挑战者联赛胜者组决赛对阵MOUZ的Ancient上，MCZ以14:10领先，tutu在B区主守时因习惯性切匕首跑步被对手静音捕捉，导致包点失守，MOUZ连追6局逆转。这一失误被HLTV记录为<span class="stat-highlight">"赛季最昂贵的切刀"</span>，直接导致tutu此后彻底沦为边缘替补。目前主要承担队内基础轮换与训练对抗任务。</p><h3>主要经历</h3><ul><li>5E平台全武器大师称号</li><li>2023年CAC精英邀请赛小组赛短暂出场</li><li>2024年ESL挑战者联赛（含致命失误场次）</li></ul></div></div>
+
+    <div class="modal-overlay" id="modal-coach"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-coach')">✕</button><h2>MCZ LiuBing · 江新宇</h2><p><strong>位置：</strong>主教练/战术总监 · Head Coach | <strong>国籍：</strong>中国 | <strong>执教MCZ：</strong>2022年至今</p><div class="divider-detail"></div><h3>选手生涯数据</h3><p>5E平台历史RATING 1.12；完美平台指挥位RATING 1.08；B5平台选手时期最高段位钻石；R0对战平台S2赛季指挥位胜率榜前十。</p><h3>简介</h3><p>本名江新宇（Jiang Xinyu），是MCZ战队唯一一位从选手席转至战术席的创始成员。他以卓越的战术嗅觉和变态的对手研究深度著称，最终主动提出退居教练席，被俱乐部高层称为<span class="stat-highlight">"MCZ史上最伟大的自我认知"</span>。转型教练后，他将完全指挥经验系统化为一套可量化的战术评分体系。在2023年PPL S2决赛对阵TYLOO时，LiuBing连叫三个暂停，三次暂停后MCZ均以完美回合得分回应。2024年上海Major半决赛惜败后，他复盘中指出的三个毫秒级时机判断失误，全部被HLTV独立复盘数据印证。2024年石油杯预选赛决赛中，LiuBing叫出<span class="stat-highlight">6次暂停</span>，均成功在下一回合得分，创下赛事纪录。</p><h3>执教荣誉</h3><ul><li>2023年PPL S2/S3双冠</li><li>2024年ESL挑战者联赛总冠军</li><li>2024年上海Major四强</li><li>2024年石油杯预选赛决赛 · 6次暂停全部得分（赛事纪录）</li><li>MCZ战术评分体系创始人</li></ul></div></div>
+
+    <!-- ==================== 时间线弹窗 ==================== -->
+    <div class="modal-overlay" id="modal-timeline1"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-timeline1')">✕</button><h2>2021年 · MCZ建队元年</h2><p><strong>时间：</strong>2021年3月 | <strong>地点：</strong>中国黑龙江省牡丹江市</p><div class="divider-detail"></div><p>MCZ电子竞技俱乐部CS分部正式宣告成立。核心阵容由MCZb1ack、MCZlele、MCZbaik、MCZmaoc及MCZ LiuBing（当时仍为选手兼指挥）组成。建队首月，五人即在完美世界竞技平台、5EPlay对战平台、B5对战平台及浩方对战平台同时登顶，创造了中国CS历史上首次"四平台同步霸榜"的奇迹。俱乐部总部设于牡丹江市中心一栋改造后的工业厂房内，配备了当时最先进的训练设施。</p></div></div>
+    <div class="modal-overlay" id="modal-timeline2"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-timeline2')">✕</button><h2>2023年 · PPL S2 & S3双冠王</h2><p><strong>时间：</strong>2023年 | <strong>地点：</strong>中国</p><div class="divider-detail"></div><p>在完美平台PPL S2联赛中，MCZ以全胜战绩闯入决赛，面对国内传统豪门TYLOO，MCZ以3:0完成横扫，三图合计仅让对手拿到<span class="stat-highlight">11分</span>。MCZb1ack贡献2.01的系列赛RATING，lele在Mirage上演盲狙穿烟四杀。随后的PPL S3赛季，MCZ再度在决赛中3:0击败TYLOO。RA、LVG等国内二线队伍面对MCZ时，甚至连拿到10分都成为奢望。</p></div></div>
+    <div class="modal-overlay" id="modal-timeline3"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-timeline3')">✕</button><h2>2023年 · 125连胜诸神之战</h2><p><strong>时间：</strong>2023年8月 | <strong>地点：</strong>线上直播</p><div class="divider-detail"></div><p>MCZ全员组队从青铜段位直播单排冲分，全程未失一局，以<span class="stat-highlight">125连胜</span>直抵天梯前十。期间因MCZ选手的枪法过于精准，举报次数过多导致完美平台举报系统<span class="stat-highlight">两次宕机</span>。直播峰值观众超过300万，成为当年中国电竞最具话题性的事件之一。</p></div></div>
+    <div class="modal-overlay" id="modal-timeline4"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-timeline4')">✕</button><h2>2024年 · IEM卡托维兹</h2><p><strong>时间：</strong>2024年2月 | <strong>地点：</strong>波兰卡托维兹</p><div class="divider-detail"></div><p>MCZ通过外卡赛2:1战胜Team Spirit晋级正赛，b1ack在Ancient打出<span class="stat-highlight">RATING 3.12</span>的统治级表现。正赛四分之一决赛，MCZ与FaZe Clan鏖战三图，决胜局14:16惜败。教练LiuBing赛后指出的三个毫秒级时机判断失误，均被HLTV复盘数据独立验证。MCZ被HLTV评为"2024年最值得关注的新兴力量"。</p></div></div>
+    <div class="modal-overlay" id="modal-timeline5"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-timeline5')">✕</button><h2>2024年 · ESL挑战者联赛夺冠</h2><p><strong>时间：</strong>2024年6月 | <strong>地点：</strong>欧洲</p><div class="divider-detail"></div><p>小组赛中MCZ先后击败GamerLegion、BIG及9z。胜者组决赛对阵MOUZ，MCZ在14:10领先下因tutu切刀失误被逆转。败者组决赛，Sheng顶替tutu首发打出<span class="stat-highlight">1.48 RATING</span>率队2:1复仇。总决赛MCZ以3:1成功复仇夺冠，完成对自身失误的救赎。</p></div></div>
+    <div class="modal-overlay" id="modal-timeline6"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-timeline6')">✕</button><h2>2024年 · 上海Major四强</h2><p><strong>时间：</strong>2024年12月 | <strong>地点：</strong>中国上海</p><div class="divider-detail"></div><p>MCZ从亚太区RMR全胜出线，四分之一决赛2:0击败G2 Esports，xiaoyu上演<span class="stat-highlight">1.04秒MAG-7三杀</span>。半决赛对阵最终亚军FaZe Clan，在决胜图Overpass上以14:16告负，仅差两分无缘Major决赛舞台。</p></div></div>
+    <div class="modal-overlay" id="modal-timeline7"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-timeline7')">✕</button><h2>2025年 · BLAST奥斯汀Major</h2><p><strong>时间：</strong>2025年6月 | <strong>地点：</strong>美国奥斯汀</p><div class="divider-detail"></div><p>在16强淘汰赛首轮，MCZ遭遇Team Spirit。Ancient地图上MCZ全场打出6次完美团队配合，lele在与donk的正面对决中取得5:3优势。第30局，b1ack在1V2残局中先秒sh1ro，却在C4起爆前<span class="stat-highlight">0.07秒</span>被反杀，MCZ遗憾出局。</p></div></div>
+
+    <!-- ==================== 新闻弹窗 ==================== -->
+    <div class="modal-overlay" id="modal-news1"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-news1')">✕</button><h2>🔥 重磅转会：MCZ正酝酿重大收购</h2><p><strong>发布时间：</strong>2026年6月28日</p><div class="divider-detail"></div><p>据多位知情人士透露，MCZ管理层正在与一支<span class="stat-highlight">欧洲顶级战队——Aurora Esports（极光电竞）</span>进行深度谈判，计划收购并买断该战队的一名核心选手。该选手在2025年HLTV年度Top20榜单中位列前八，以其卓越的突破能力与残局处理闻名。双方的首轮接触始于2026年5月中旬，在IEM达拉斯站期间进行了长达数小时的闭门会谈。谈判已进入第三轮，核心议题围绕转会费金额、合同年限及选手个人待遇展开。MCZ此举被视为对阵容深度的战略性补强，目标直指2026年下半年的一系列重大赛事。出于商业保密协议，目前尚无法披露该选手的具体ID，更多详情将在未来数周内正式公布。</p></div></div>
+    <div class="modal-overlay" id="modal-news2"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-news2')">✕</button><h2>MCZ确认参加2026年EWC电竞世界杯</h2><p><strong>发布时间：</strong>2026年6月20日</p><div class="divider-detail"></div><p>MCZ已收到沙特电竞世界杯组委会的正式邀请函，将以<span class="stat-highlight">种子队伍身份</span>直接进入小组赛阶段。赛事将于2026年8月在沙特阿拉伯利雅得举行，总奖金池高达6000万美元。MCZ将派出全主力阵容参赛，教练LiuBing表示已针对EWC赛制进行了专门的战术储备。</p></div></div>
+    <div class="modal-overlay" id="modal-news3"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-news3')">✕</button><h2>MCZ青训营2026夏季招募启动</h2><p><strong>发布时间：</strong>2026年6月15日</p><div class="divider-detail"></div><p>本轮青训招募门槛为历史最高。月薪起薪<span class="stat-highlight">¥55,000-¥120,000 CNY</span>，签约奖金¥200,000起。报名者需满足：完美平台RATING ≥ 1.90、5E天梯TOP20或B5平台RATING ≥ 1.75，年龄16-20周岁，每日训练不低于12小时，通过MCZ专属心理评估及英语面试。报名邮箱：mczesports@111631.xyz</p></div></div>
+    <div class="modal-overlay" id="modal-news4"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-news4')">✕</button><h2>MCZ与Red Bull红牛达成战略赞助</h2><p><strong>发布时间：</strong>2026年5月30日</p><div class="divider-detail"></div><p>Red Bull红牛正式成为MCZ官方能量饮料合作伙伴。双方将在赛事补给、内容创作及青训领域展开深度合作。红牛将为MCZ选手提供定制化的运动营养方案，并在MCZ总部设立专属体能训练区。此项合作标志着MCZ在商业拓展方面迈出了重要一步。</p></div></div>
+
+    <!-- ==================== 赞助商弹窗 ==================== -->
+    <div class="modal-overlay" id="modal-sponsor-redbull"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sponsor-redbull')">✕</button><h2>Red Bull 红牛</h2><p>MCZ官方能量饮料合作伙伴。红牛为MCZ选手提供赛时能量补给及定制化营养方案，助力选手在高压赛事中保持巅峰状态。双方在2026年签署了为期三年的战略合作协议。</p></div></div>
+    <div class="modal-overlay" id="modal-sponsor-logitech"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sponsor-logitech')">✕</button><h2>Logitech G · 罗技</h2><p>MCZ官方外设合作伙伴。罗技为MCZ全队提供G系列高端电竞外设，包括G502 X PLUS无线游戏鼠标、G Pro X Superlight及G915键盘等旗舰产品。</p></div></div>
+    <div class="modal-overlay" id="modal-sponsor-intel"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sponsor-intel')">✕</button><h2>Intel 英特尔</h2><p>MCZ官方处理器合作伙伴。Intel为MCZ训练基地提供最新一代酷睿处理器及技术支持，确保选手在最低延迟环境下进行训练与比赛。</p></div></div>
+    <div class="modal-overlay" id="modal-sponsor-monster"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sponsor-monster')">✕</button><h2>Monster Energy 魔爪</h2><p>MCZ官方能量饮料合作伙伴之一。Monster Energy为MCZ提供赛事能量支持，并在MCZ官方内容中拥有品牌露出权益。</p></div></div>
+    <div class="modal-overlay" id="modal-sponsor-nvidia"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sponsor-nvidia')">✕</button><h2>NVIDIA GeForce</h2><p>MCZ官方显卡合作伙伴。NVIDIA为MCZ训练基地配备最新GeForce RTX系列显卡，以超高帧率和低延迟渲染为选手提供极致流畅的训练与比赛体验。双方在2025年签署了长期技术合作协议。</p></div></div>
+    <div class="modal-overlay" id="modal-sponsor-hyperx"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sponsor-hyperx')">✕</button><h2>HyperX · 极度未知</h2><p>MCZ官方音频设备合作伙伴。HyperX为MCZ全队提供Cloud系列电竞耳机及麦克风产品，确保选手在赛场上的语音沟通清晰无延迟。其标志性的舒适佩戴设计深受MCZ选手好评。</p></div></div>
+    <div class="modal-overlay" id="modal-sponsor-dxracer"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sponsor-dxracer')">✕</button><h2>DXRacer · 迪锐克斯</h2><p>MCZ官方电竞椅合作伙伴。DXRacer为MCZ训练基地及赛事出征提供专业电竞椅，以人体工学设计保障选手在长时间训练中的坐姿健康与舒适度。MCZ选手座椅均采用定制化配色方案。</p></div></div>
+    <div class="modal-overlay" id="modal-sponsor-huya"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-sponsor-huya')">✕</button><h2>虎牙直播 · HUYA</h2><p>MCZ官方直播平台合作伙伴。MCZ全队选手在虎牙直播平台拥有官方认证直播间，定期进行训练直播、赛事解说及粉丝互动。虎牙直播间：<strong>MCZ_Official</strong>（房间号：886688），关注即可第一时间获取MCZ赛事资讯与独家内容。</p></div></div>
+
+    <!-- ==================== 社交媒体弹窗 ==================== -->
+    <div class="modal-overlay" id="modal-social-huya"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-social-huya')">✕</button><h2>🎮 虎牙直播 · MCZ官方直播间</h2><p><strong>房间号：</strong>886688 | <strong>主播ID：</strong>MCZ_Official</p><div class="divider-detail"></div><p>MCZ全队选手在虎牙直播平台进行日常训练直播、赛事解说及粉丝互动。关注直播间即可第一时间获取MCZ赛事资讯、独家幕后内容及选手个人直播视角。定期举办粉丝水友赛，与MCZ选手同场竞技。</p></div></div>
+    <div class="modal-overlay" id="modal-social-wechat"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-social-wechat')">✕</button><h2>📱 微信公众号 · MCZ电子竞技俱乐部</h2><p><strong>微信号：</strong>MCZ_Esports_Club</p><div class="divider-detail"></div><p>关注MCZ官方微信公众号，获取最新赛事战报、选手专访、青训招募公告及俱乐部活动资讯。公众号定期推送深度战术分析文章及MCZ周边福利，是MCZ粉丝的官方信息聚合平台。</p></div></div>
+    <div class="modal-overlay" id="modal-social-weibo"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-social-weibo')">✕</button><h2>📷 微博 · @MCZ电子竞技俱乐部</h2><p><strong>微博ID：</strong>@MCZ电子竞技俱乐部</p><div class="divider-detail"></div><p>MCZ官方微博账号实时更新赛事动态、选手日常及俱乐部公告。关注微博参与话题互动，有机会获得MCZ限量周边及赛事门票。MCZ选手个人微博亦可通过官方账号关注列表找到。</p></div></div>
+    <div class="modal-overlay" id="modal-social-douyin"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-social-douyin')">✕</button><h2>🎵 抖音 · MCZ_Esports</h2><p><strong>抖音号：</strong>MCZ_Esports</p><div class="divider-detail"></div><p>MCZ官方抖音账号发布赛事高光时刻、选手精彩集锦及幕后花絮短视频。关注抖音，不错过任何MCZ的精彩瞬间。定期更新选手日常训练vlog及趣味挑战内容。</p></div></div>
+    <div class="modal-overlay" id="modal-social-bilibili"><div class="modal-content"><button class="modal-close" onclick="closeModal('modal-social-bilibili')">✕</button><h2>📺 B站 · MCZ电子竞技俱乐部官方</h2><p><strong>B站UID：</strong>MCZ_Official</p><div class="divider-detail"></div><p>MCZ官方B站账号发布完整赛事录像、战术复盘视频及选手长专访内容。B站是MCZ深度内容的主要发布平台，包括教练LiuBing的战术课堂系列及MCZ历史纪录片。关注B站，深入了解MCZ的战术哲学与团队文化。</p></div></div>
+
+    <!-- 罗技G502X弹窗广告 -->
+    <div class="modal-overlay" id="modal-logitech"><div class="modal-content" style="text-align:center;"><button class="modal-close" onclick="closeModal('modal-logitech')">✕</button><h2>🖱️ Logitech G502 X PLUS</h2><p style="color:var(--gold-light);font-size:1.1rem;">MCZ战队官方指定鼠标</p><div class="divider-detail"></div><p>LIGHTFORCE混合微动技术 · LIGHTSPEED无线连接 · HERO 25K光学传感器</p><p>可自定义RGB灯效 · 多达13个可编程按键 · 双模滚轮</p><p style="color:var(--cyan-light);font-weight:700;">MCZ选手同款 · 赛场验证</p><p style="font-size:0.85rem;color:var(--text2);">G502 X有线版 | G502 X PLUS无线版 均已在售</p></div></div>
+
+    <!-- 红牛弹窗广告 -->
+    <div class="modal-overlay" id="modal-redbull-ad"><div class="modal-content" style="text-align:center;"><button class="modal-close" onclick="closeModal('modal-redbull-ad')">✕</button><h2 style="color:#e63946;">🥤 Red Bull 红牛</h2><p style="font-size:1.2rem;color:#fff;">红牛给你翅膀 · MCZ官方合作伙伴</p><div class="divider-detail"></div><p>红牛为MCZ全队提供赛时能量支持，助力选手突破极限。</p><p style="color:var(--gold-light);">2026-2029战略合作 · 见证东方军团崛起</p></div></div>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+        window.addEventListener('scroll', () => { if (window.scrollY > 50) { navbar.classList.add('scrolled'); } else {
+                navbar.classList.remove('scrolled'); } });
+        menuToggle.addEventListener('click', () => { menuToggle.classList.toggle('open');
+            navLinks.classList.toggle('open'); });
+        document.querySelectorAll('.nav-links a').forEach(link => { link.addEventListener('click', () => { navLinks
+                    .classList.remove('open');
+                menuToggle.classList.remove('open');
+                document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+                link.classList.add('active'); }); });
+
+        function openModal(id) { const modal = document.getElementById(id); if (modal) { modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                modal.scrollTop = 0; } }
+
+        function closeModal(id) { const modal = document.getElementById(id); if (modal) { modal.classList.remove('active');
+                document.body.style.overflow = ''; } }
+        document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', function(e) { if (
+                    e.target === this) { this.classList.remove('active');
+                    document.body.style.overflow = ''; } }); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { document.querySelectorAll(
+                    '.modal-overlay.active').forEach(modal => { modal.classList.remove('active'); });
+                document.body.style.overflow = ''; } });
+
+        function closeBottomAd() { const adBar = document.getElementById('bottomAdBar');
+            adBar.classList.add('hidden-ad');
+            sessionStorage.setItem('mcz_bottom_ad_closed', 'true'); }
+        window.addEventListener('DOMContentLoaded', () => { if (sessionStorage.getItem('mcz_bottom_ad_closed') ===
+                'true') { document.getElementById('bottomAdBar').classList.add('hidden-ad'); } });
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => { const adBar = document.getElementById('bottomAdBar'); const cs =
+                window.scrollY; if (cs > lastScroll && cs > 300 && !adBar.classList.contains('hidden-ad')) { adBar.style
+                    .opacity = '0.7'; } else if (cs < lastScroll) { adBar.style.opacity = '1'; }
+            lastScroll = cs; });
+        let redbullAdShown = false;
+        setTimeout(() => { if (!redbullAdShown && sessionStorage.getItem('mcz_redbull_ad_shown') !== 'true') { openModal(
+                    'modal-redbull-ad');
+                redbullAdShown = true;
+                sessionStorage.setItem('mcz_redbull_ad_shown', 'true'); } }, 3000);
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => { anchor.addEventListener('click', function(e) { const
+                    href = this.getAttribute('href'); if (href === '#home') { e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' }); return; } const target = document.querySelector(
+                    href); if (target) { e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' }); } }); });
+        console.log('%cMCZ电子竞技俱乐部 %c· Mudanjiang Creation Zenith', 'color:#c9a96e;font-size:1.2rem;letter-spacing:2px;',
+            'color:#0ea5a0;');
+        console.log('%c国家富强 · 民族振兴 · 我尽己任', 'color:#e8d5a3;letter-spacing:2px;');
+        console.log('%c商务合作: mczesports@111631.xyz', 'color:#8a8a8a;');
+    </script>
+</body>
+</html>
